@@ -7,24 +7,28 @@
 //
 
 
-//  apikey bf00956c5205bb2797aeb54755ad8914
-
 import UIKit
 
-class WeatherViewController: UIViewController {
+protocol WeatherManagerDelegate {
+    func didUpdateWeather(_ weaherManager: WeatherManager, weather: WeatherModel)
+    func didFailWithError(error: Error)
+}
 
+
+class WeatherViewController: UIViewController {
+   
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var searchTextField: UITextField!
     
     var weatherManager = WeatherManager()
-    
+    var delegate: WeatherManagerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         searchTextField.delegate = self
-        
+        weatherManager.delegate = self
     }
 
     @IBAction func searchPressed(_ sender: UIButton) {
@@ -56,4 +60,18 @@ extension WeatherViewController: UITextFieldDelegate {
         }
         searchTextField.text = nil
     }
+}
+
+
+//MARK: - WeatherManagerDelegate
+extension WeatherViewController: WeatherManagerDelegate {
+    func didFailWithError(error: Error) {
+        print(error)
+    }
+    
+
+    func didUpdateWeather(_ weaherManager: WeatherManager, weather: WeatherModel) {
+        print(weather.temperature)
+    }
+    
 }

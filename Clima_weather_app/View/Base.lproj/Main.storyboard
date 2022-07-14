@@ -54,8 +54,8 @@
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cloud.rain" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dhE-wr-bkM">
-                                        <rect key="frame" x="254" y="50" width="120" height="121.5"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cloud" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dhE-wr-bkM">
+                                        <rect key="frame" x="254" y="52.5" width="120" height="115"/>
                                         <color key="tintColor" name="weatherColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="W49-Xk-rt0"/>
@@ -124,11 +124,11 @@
     </scenes>
     <resources>
         <image name="background" width="662" height="662"/>
-        <image name="cloud.rain" catalog="system" width="128" height="125"/>
+        <image name="cloud" catalog="system" width="128" height="87"/>
         <image name="location.circle.fill" catalog="system" width="128" height="121"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <namedColor name="weatherColor">
-            <color red="0.1065355018" green="0.26210075620000001" blue="0.28540784120000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.10700000077486038" green="0.26199999451637268" blue="0.28499999642372131" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
