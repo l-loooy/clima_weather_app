@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 
 struct WeatherManager {
@@ -20,12 +21,17 @@ struct WeatherManager {
         performRequestWith(urlString)
     }
     
+    func fetchWeather(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        let urlString = "\(weatherURl)&lat=\(latitude)&lon=\(longitude)"
+        performRequestWith(urlString)
+    }
+    
     func performRequestWith(_ urlString: String) {
-
+        
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, response, error) in
-                //при неудачном выполнении сессии смотрим ошибку
+                //обрабатываем error
                 if error != nil {
                     self.delegate?.didFailWithError(error: error!)
                     return
@@ -35,7 +41,6 @@ struct WeatherManager {
                     if let weather = self.pasrseJSON(safeData) {
                         //вызываем метод делегата для обновления UI
                         self.delegate?.didUpdateWeather(self, weather: weather)
-                        
                     }
                 }
             }
@@ -50,7 +55,6 @@ struct WeatherManager {
             let id = decodedData.weather[0].id
             let temp = decodedData.main.temp
             let name = decodedData.name
-            
             
             let weather = WeatherModel(conditionId: id, cityName: name, temperature: temp)
             return weather

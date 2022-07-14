@@ -33,6 +33,9 @@
                                                 </constraints>
                                                 <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <state key="normal" backgroundImage="location.circle.fill" catalog="system"/>
+                                                <connections>
+                                                    <action selector="currentWeatherButtonPressed:" destination="2kR-bi-GD2" eventType="touchUpInside" id="SOs-hm-o8n"/>
+                                                </connections>
                                             </button>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" clearsOnBeginEditing="YES" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="gIK-CH-r7s">
                                                 <rect key="frame" x="50" y="0.0" width="274" height="40"/>

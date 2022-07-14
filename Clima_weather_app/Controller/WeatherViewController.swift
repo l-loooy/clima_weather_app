@@ -8,6 +8,7 @@
 
 
 import UIKit
+import CoreLocation
 
 protocol WeatherManagerDelegate {
     func didUpdateWeather(_ weaherManager: WeatherManager, weather: WeatherModel)
@@ -23,10 +24,14 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var searchTextField: UITextField!
     
     var weatherManager = WeatherManager()
-    var delegate: WeatherManagerDelegate?
+    let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
+        
         searchTextField.delegate = self
         weatherManager.delegate = self
     }
@@ -64,14 +69,38 @@ extension WeatherViewController: UITextFieldDelegate {
 
 //MARK: - WeatherManagerDelegate
 extension WeatherViewController: WeatherManagerDelegate {
+    
     func didFailWithError(error: Error) {
         print(error)
     }
     
     func didUpdateWeather(_ weaherManager: WeatherManager, weather: WeatherModel) {
+        //так как данные для обновления UI получены из тела замыкания, обновлять UI нужно через главный поток ассинхронно, во избежание зависания приложения
         DispatchQueue.main.async {
             self.temperatureLabel.text = weather.temperatureString
             self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+            self.cityLabel.text = weather.cityName
         }
+    }
+    
+    @IBAction func currentWeatherButtonPressed(_ sender: UIButton) {
+        locationManager.requestLocation()
+    }
+}
+
+//MARK: - CLLocationManagerDelegate
+extension WeatherViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            locationManager.stopUpdatingLocation()
+            let lat = location.coordinate.latitude
+            let lon = location.coordinate.longitude
+            weatherManager.fetchWeather(latitude: lat, longitude: lon)
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
     }
 }
