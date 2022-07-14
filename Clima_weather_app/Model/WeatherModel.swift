@@ -17,22 +17,23 @@ struct WeatherModel {
         return String(format: "%.01f", temperature)
     }
     
+    //computed property для отображения иконки погоды 
     var conditionName: String {
         switch conditionId {
-        case 200..<300:
-            return ("cloud.bolt")
+        case 200...232:
+            return "cloud.bolt"
         case 300...321:
-            return ("cloud.drizzle")
-        case 500..<600:
-            return ("cloud.rain")
-        case 600..<700:
-            return ("cloud.snow")
-        case 700..<800:
-            return ("cloud.fog")
+            return "cloud.drizzle"
+        case 500...531:
+            return "cloud.rain"
+        case 600...622:
+            return "cloud.snow"
+        case 701...781:
+            return "cloud.fog"
         case 800:
-            return ("sum.max")
+            return "sun.max"
         case 801...804:
-            return ("cloud.bolt")
+            return "cloud.bolt"
         default:
             return "cloud"
         }

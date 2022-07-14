@@ -16,7 +16,7 @@ protocol WeatherManagerDelegate {
 
 
 class WeatherViewController: UIViewController {
-   
+    
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
@@ -30,15 +30,17 @@ class WeatherViewController: UIViewController {
         searchTextField.delegate = self
         weatherManager.delegate = self
     }
-
-    @IBAction func searchPressed(_ sender: UIButton) {
-        searchTextField.endEditing(true)
-    }
-    
 }
 
 //MARK: - UITextFieldDelegate
 extension WeatherViewController: UITextFieldDelegate {
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let city = searchTextField.text {
+            weatherManager.fetchWeather(cityName: city)
+        }
+        searchTextField.text = nil
+    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
@@ -54,11 +56,8 @@ extension WeatherViewController: UITextFieldDelegate {
         }
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if let city = searchTextField.text {
-            weatherManager.fetchWeather(cityName: city)
-        }
-        searchTextField.text = nil
+    @IBAction func searchPressed(_ sender: UIButton) {
+        searchTextField.endEditing(true)
     }
 }
 
@@ -69,9 +68,10 @@ extension WeatherViewController: WeatherManagerDelegate {
         print(error)
     }
     
-
     func didUpdateWeather(_ weaherManager: WeatherManager, weather: WeatherModel) {
-        print(weather.temperature)
+        DispatchQueue.main.async {
+            self.temperatureLabel.text = weather.temperatureString
+            self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+        }
     }
-    
 }

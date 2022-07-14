@@ -15,31 +15,34 @@ struct WeatherManager {
     
     var delegate: WeatherManagerDelegate?
     
-    
     func fetchWeather(cityName: String) {
         let urlString = "\(weatherURl)&q=\(cityName.localizedCapitalized)"
         performRequestWith(urlString)
     }
     
     func performRequestWith(_ urlString: String) {
+
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, response, error) in
+                //при неудачном выполнении сессии смотрим ошибку
                 if error != nil {
                     self.delegate?.didFailWithError(error: error!)
                     return
                 }
+                //при удачном выполнении сессии извлекаем data в safeData из которой собираем объект weather: WeatherModel с помощью метода parseJSON
                 if let safeData = data {
                     if let weather = self.pasrseJSON(safeData) {
+                        //вызываем метод делегата для обновления UI
                         self.delegate?.didUpdateWeather(self, weather: weather)
+                        
                     }
                 }
             }
-            
             task.resume()
         }
     }
-    
+    //Преобразуем данные, полученные из сети в формат WeatherModel
     func pasrseJSON(_ weatherData: Data) -> WeatherModel? {
         let decoder = JSONDecoder()
         do {
@@ -50,13 +53,12 @@ struct WeatherManager {
             
             
             let weather = WeatherModel(conditionId: id, cityName: name, temperature: temp)
-            print(weather.temperatureString)
+            return weather
             
         }
         catch {
             delegate?.didFailWithError(error: error)
             return nil
         }
-        return nil
     }
 }
